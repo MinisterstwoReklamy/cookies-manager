@@ -1,22 +1,28 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer'); // nie puppeteer-core, chyba że masz swój Chromium
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: 'false', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
   const page = await browser.newPage();
-  const url = 'https://www.777ulotki.pl/';
 
-  await page.goto(url, {waitUntil: 'load'});
+  // Włącz logowanie wszystkich requestów
+  page.on('request', req => console.log('REQUEST:', req.url()));
+  page.on('response', res => console.log('RESPONSE:', res.url()));
 
-  await page.waitForResponse(response =>
-    response.url().startsWith("https://cookies-manager.mr.org.pl/api/customer/")
+  // Zaczynamy czekanie na konkretny skrypt PRZED wejściem na stronę
+  const scriptUrlPattern = /^https:\/\/cookies-manager\.mr\.org\.pl\/api\/customer\/.+/;
+
+  const waitForScript = page.waitForRequest(req =>
+    scriptUrlPattern.test(req.url()), { timeout: 30000 }
   );
 
-  const cookieAcceptBtn = await page.$("button[data-role='all']");
+  await page.goto('https://www.777ulotki.pl/', { waitUntil: 'networkidle2' });
 
-  // await console.log('The element cookieAcceptBtn was resolved to: ' + cookieAcceptBtn);
-  await cookieAcceptBtn.click();  
-
-  console.log(await page.cookies());
+  try {
+    await waitForScript;
+    console.log('✅ Skrypt cookies-manager został załadowany!');
+  } catch (err) {
+    console.error('❌ Nie udało się załadować skryptu cookies-manager w czasie 30s');
+  }
 
   await browser.close();
 })();
