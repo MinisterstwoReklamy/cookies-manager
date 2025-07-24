@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   await page.goto('https://www.ministerstworeklamy.pl/');
-  console.log(await browser.cookies());
+  console.log(await page.cookies());
 
   await browser.close();
 })();
