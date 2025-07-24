@@ -6,11 +6,10 @@ const puppeteer = require('puppeteer');
   const url = 'https://www.777ulotki.pl/';
 
   await page.goto(url, {waitUntil: "domcontentloaded"});
-  const acceptBtnSelector = ">>> [class='cm__btn']";
-  console.log( acceptBtnSelector );
+  const acceptBtnSelector = '.cm__btn';
   const accept = await page.waitForSelector(acceptBtnSelector);
+  console.log( accept );
   await accept.click();
-  await page.waitForSelector(acceptBtnSelector, {hidden: true});
 
   console.log(await page.cookies());
 
