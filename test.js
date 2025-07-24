@@ -20,9 +20,11 @@ const puppeteer = require('puppeteer'); // nie puppeteer-core, chyba że masz sw
   try {
     await waitForScript;
     console.log('✅ Skrypt cookies-manager został załadowany!');
+    console.log( page.cookies() );
   } catch (err) {
     console.error('❌ Nie udało się załadować skryptu cookies-manager w czasie 30s');
   }
+
 
   await browser.close();
 })();
