@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 
   await page.goto(url, {waitUntil: "load"});
 
-  const cookieAcceptBtn = await page.$("button[data-role='all']");
+  const cookieAcceptBtn = await page.$("#menu2");
 
   await console.log('The element cookieAcceptBtn was resolved to: ' + cookieAcceptBtn);
   await cookieAcceptBtn.click();  
