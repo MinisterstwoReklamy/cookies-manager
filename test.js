@@ -1,10 +1,15 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
-(async () => {
-  const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const page = await browser.newPage();
-  await page.goto('https://www.ministerstworeklamy.pl/');
-  console.log(await browser.cookies());
+const browser = await puppeteer.launch();
 
-  await browser.close();
-})();
+const page = await browser.newPage();
+
+await page.goto('https://www.ministerstworeklamy.pl/');
+
+// In this example, we set a cookie using script evaluation.
+// Cookies can be set by the page/server in various ways.
+await page.evaluate(() => {
+  document.cookie = 'myCookie = MyCookieValue';
+});
+
+console.log(await browser.cookies()); // print available cookies.
