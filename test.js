@@ -5,9 +5,9 @@ const puppeteer = require('puppeteer');
   const page = await browser.newPage();
   const url = 'https://www.777ulotki.pl/';
 
-  await page.goto(url, {waitUntil: "domcontentloaded"});
+  await page.goto(url, {waitUntil: "load"});
 
-  const cookieAcceptBtn = await page.$('.cm__body .cm__btn');
+  const cookieAcceptBtn = await page.$("button[data-role='all']");
 
   await console.log('The element cookieAcceptBtn was resolved to: ' + cookieAcceptBtn);
   await cookieAcceptBtn.click();  
